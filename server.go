@@ -52,5 +52,6 @@ func main() {
 	mux := http.NewServeMux()
 	mux.Handle("/", http.FileServer(http.Dir(".")))
 	mux.HandleFunc("/wasm_exec.html", wasmHandler)
+	log.Printf("server started")
 	log.Fatal(http.ListenAndServe(":8080", mux))
 }
