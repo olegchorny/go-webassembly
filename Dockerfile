@@ -15,7 +15,7 @@ RUN CGO_ENABLED=1 GOARCH=wasm GOOS=js go build -o test.wasm main.go
 
 RUN go build -o app server.go
 
-EXPOSE 8080
+EXPOSE 3000
 CMD ["./app"]
 
 

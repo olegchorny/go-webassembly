@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qrgenerator
+  labels:
+    app: qrgenerator
+    version: "v1"
+  annotations:
+    version: "v1"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qrgenerator
+  template:
+    metadata: 
+      labels: 
+        app: qrgenerator
+    spec:
+      containers:
+      - name: qrgenerator
+        image: olegchorny/qrgenerator:latest
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    prometheus.io/scrape: "true"
+  labels:
+    component: qrgenerator
+  name: qrgenerator
+  namespace: tcgua
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: qrgenerator
+  sessionAffinity: None
+  type: LoadBalancer
