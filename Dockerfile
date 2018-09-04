@@ -5,11 +5,12 @@ ADD . /app/
 WORKDIR /app 
 #RUN rm main.go
 
-RUN CGO_ENABLED=1
+#RUN CGO_ENABLED=1
 
-#RUN go get -u "syscall/js" 
-#RUN go get -u "github.com/dennwc/dom"
-#RUN go get -u "github.com/boombuler/barcode"
+
+RUN go get -v "github.com/dennwc/dom"
+RUN go get -v "github.com/boombuler/barcode"
+RUN go get -v "syscall/js" 
 
 RUN  CGO_ENABLED=1 GOARCH=wasm GOOS=js go build -o test.wasm main.go
 
