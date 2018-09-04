@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: qrgenerator
-        image: olegchorny/qrgenerator:latest
+        image: ochorny/qrgenerator:latest
         imagePullPolicy: Always
 ---
 apiVersion: v1
@@ -35,7 +35,7 @@ spec:
   ports:
   - port: 80
     protocol: TCP
-    targetPort: 8080
+    targetPort: 3000
   selector:
     app: qrgenerator
   sessionAffinity: None
