@@ -1,4 +1,4 @@
-FROM golang:1.11
+FROM golang:1.11-stretch
 WORKDIR /go/src/app
 COPY . .
 RUN go get "syscall/js" 
