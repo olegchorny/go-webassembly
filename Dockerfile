@@ -1,12 +1,13 @@
 FROM golang:1.11-stretch
 
-#RUN mkdir /app 
-#ADD . /app/ 
-#WORKDIR /app 
+RUN mkdir /app 
+ADD . /app/ 
+WORKDIR /app 
+RUN rm main.go
 
-RUN CGO_ENABLED=1
+#RUN CGO_ENABLED=1
 
-RUN go get -u "syscall/js" 
+#RUN go get -u "syscall/js" 
 RUN go get -u "github.com/dennwc/dom"
 RUN go get -u "github.com/boombuler/barcode"
 
