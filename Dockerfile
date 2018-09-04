@@ -5,10 +5,10 @@ ADD . /app/
 WORKDIR /app 
 #RUN rm main.go
 
-#RUN CGO_ENABLED=1
 
 
-RUN go get -u "github.com/dennwc/dom/..."
+
+RUN CGO_ENABLED=1 && RUN go get -u "github.com/dennwc/dom/..."
 RUN go get -u "github.com/boombuler/barcode/..."
 #RUN go get -uv "syscall/js" 
 
