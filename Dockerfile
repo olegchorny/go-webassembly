@@ -8,9 +8,9 @@ WORKDIR /app
 #RUN CGO_ENABLED=1
 
 
-RUN go get -v "github.com/dennwc/dom"
-RUN go get -v "github.com/boombuler/barcode"
-RUN go get -v "syscall/js" 
+RUN go get -uv "github.com/dennwc/dom"
+RUN go get -uv "github.com/boombuler/barcode"
+RUN go get -uv "syscall/js" 
 
 RUN  CGO_ENABLED=1 GOARCH=wasm GOOS=js go build -o test.wasm main.go
 
