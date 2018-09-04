@@ -1,5 +1,5 @@
 FROM golang:1.11-stretch
-WORKDIR /go/src/app
+
 RUN go get -u "syscall/js" 
 RUN go get -u "github.com/dennwc/dom"
 RUN go get -u "github.com/boombuler/barcode"
