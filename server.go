@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 
 	"github.com/boombuler/barcode"
 	"github.com/boombuler/barcode/qr"
@@ -49,6 +50,13 @@ func wasmHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+
+	files, err := filepath.Glob("*")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(files) // contains a list of all files in the current directory
+
 	mux := http.NewServeMux()
 	mux.Handle("/", http.FileServer(http.Dir(".")))
 	mux.HandleFunc("/wasm_exec.html", wasmHandler)
