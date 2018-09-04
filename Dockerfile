@@ -8,7 +8,7 @@ WORKDIR /app
 
 
 
-RUN CGO_ENABLED=1 go get -u "github.com/dennwc/dom/..."
+RUN CGO_ENABLED=1 GOOS=js GOARCH=wasm go get -u "github.com/dennwc/dom/..."
 RUN go get -u "github.com/boombuler/barcode/..."
 #RUN go get -uv "syscall/js" 
 
