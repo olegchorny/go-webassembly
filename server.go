@@ -8,6 +8,10 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/dchest/uniuri"
+
+	//"github.com/rs/xid"
+
 	"github.com/boombuler/barcode"
 	"github.com/boombuler/barcode/qr"
 )
@@ -29,8 +33,10 @@ func wasmHandler(w http.ResponseWriter, r *http.Request) {
 		m := r.FormValue("mail")
 		p := r.FormValue("phone")
 		d := r.FormValue("dci")
+		//	x := xid.New()
+		x := uniuri.New()
 
-		content := f + l + m + p + d
+		content := x + " " + f + " " + l + " " + d + " " + m + " " + p
 		filename := "./qr/" + f + l + ".png"
 
 		qrCode, _ := qr.Encode(content, qr.M, qr.Auto)
@@ -40,6 +46,8 @@ func wasmHandler(w http.ResponseWriter, r *http.Request) {
 
 		file, _ := os.Create(filename)
 		defer file.Close()
+
+		log.Printf("new code: " + filename)
 
 		png.Encode(file, qrCode)
 
