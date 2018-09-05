@@ -47,7 +47,7 @@ func wasmHandler(w http.ResponseWriter, r *http.Request) {
 		file, _ := os.Create(filename)
 		defer file.Close()
 
-		log.Printf("new code: " + filename + "id: " + x)
+		log.Printf("new code: " + filename + " id: " + x)
 
 		png.Encode(file, qrCode)
 
