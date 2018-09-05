@@ -36,7 +36,7 @@ func wasmHandler(w http.ResponseWriter, r *http.Request) {
 		//	x := xid.New()
 		x := uniuri.New()
 
-		content := x + " " + f + " " + l + " " + d + " " + m + " " + p
+		content := f + " " + l + " " + x + " " + d + " " + m + " " + p
 		filename := "./qr/" + f + l + ".png"
 
 		qrCode, _ := qr.Encode(content, qr.M, qr.Auto)
@@ -47,7 +47,7 @@ func wasmHandler(w http.ResponseWriter, r *http.Request) {
 		file, _ := os.Create(filename)
 		defer file.Close()
 
-		log.Printf("new code: " + filename)
+		log.Printf("new code: " + filename + "id: " + x)
 
 		png.Encode(file, qrCode)
 
