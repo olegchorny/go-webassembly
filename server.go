@@ -16,7 +16,7 @@ func wasmHandler(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
 	case "GET":
-		http.ServeFile(w, r, "wasm_exec.html")
+		http.ServeFile(w, r, "index.html")
 	case "POST":
 		// Call ParseForm() to parse the raw query and update r.PostForm and r.Form.
 		if err := r.ParseForm(); err != nil {
@@ -31,7 +31,7 @@ func wasmHandler(w http.ResponseWriter, r *http.Request) {
 		d := r.FormValue("dci")
 
 		content := f + l + m + p + d
-		filename := f + l + ".png"
+		filename := "./qr/" + f + l + ".png"
 
 		qrCode, _ := qr.Encode(content, qr.M, qr.Auto)
 
@@ -59,7 +59,7 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.Handle("/", http.FileServer(http.Dir(".")))
-	mux.HandleFunc("/wasm_exec.html", wasmHandler)
+	mux.HandleFunc("/index.html", wasmHandler)
 	log.Printf("server started")
 	log.Fatal(http.ListenAndServe(":3000", mux))
 }

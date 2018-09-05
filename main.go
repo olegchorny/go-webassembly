@@ -31,9 +31,9 @@ func main() {
 	p := js.Global().Get("document").Call("getElementById", "phone").Get("value").String()
 	d := js.Global().Get("document").Call("getElementById", "dci").Get("value").String()
 
-	filename := f + l + ".png"
+	filename := "./qr/" + f + l + ".png"
 
-	_, err := http.PostForm("./wasm_exec.html",
+	_, err := http.PostForm("./index.html",
 		url.Values{"first": {f}, "last": {l}, "mail": {m}, "phone": {p}, "dci": {d}})
 
 	if err != nil {
@@ -43,6 +43,6 @@ func main() {
 	i.SetAttribute("src", filename)
 
 	logger := log.New((*writer)(t), "", log.LstdFlags)
-	logger.Print("QR code is ready" + "./" + filename)
+	logger.Print("QR code is ready: " + filename)
 
 }
