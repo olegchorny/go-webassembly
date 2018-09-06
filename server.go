@@ -32,12 +32,12 @@ func wasmHandler(w http.ResponseWriter, r *http.Request) {
 		l := r.FormValue("last")
 		m := r.FormValue("mail")
 		p := r.FormValue("phone")
-		d := r.FormValue("dci")
+		//d := r.FormValue("dci")
 		//	x := xid.New()
 		x := uniuri.New()
 
-		content := f + " " + l + " " + x + " " + d + " " + m + " " + p
-		filename := "./qr/" + f + l + ".png"
+		content := f + " " + l + " " + x + " " + m + " " + p
+		filename := "./qr/" + f + ".png"
 
 		qrCode, _ := qr.Encode(content, qr.M, qr.Auto)
 

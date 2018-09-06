@@ -25,17 +25,17 @@ func main() {
 	t := dom.GetDocument().GetElementById("target")
 	i := dom.GetDocument().GetElementById("qrcode")
 
-	f := js.Global().Get("document").Call("getElementById", "first").Get("value").String()
-	l := js.Global().Get("document").Call("getElementById", "last").Get("value").String()
-	m := js.Global().Get("document").Call("getElementById", "mail").Get("value").String()
-	p := js.Global().Get("document").Call("getElementById", "phone").Get("value").String()
-	d := js.Global().Get("document").Call("getElementById", "dci").Get("value").String()
+	f := js.Global().Get("document").Call("getElementById", "primary_player").Get("value").String()
+	l := js.Global().Get("document").Call("getElementById", "primary_dci").Get("value").String()
+	m := js.Global().Get("document").Call("getElementById", "secondary_player").Get("value").String()
+	p := js.Global().Get("document").Call("getElementById", "secondary_dci").Get("value").String()
+	//d := js.Global().Get("document").Call("getElementById", "dci").Get("value").String()
 
-	filename := "./qr/" + f + l + ".png"
+	filename := "./qr/" + f + ".png"
 
 	_, err := http.PostForm("./index.html",
-		url.Values{"first": {f}, "last": {l}, "mail": {m}, "phone": {p}, "dci": {d}})
-
+		//url.Values{"first": {f}, "last": {l}, "mail": {m}, "phone": {p}, "dci": {d}})
+		url.Values{"first": {f}, "last": {l}, "mail": {m}, "phone": {p}})
 	if err != nil {
 		log.Fatal(err)
 	}
