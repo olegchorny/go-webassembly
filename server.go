@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"image"
+	"image/draw"
 	"image/png"
 	"log"
 	"net/http"
@@ -15,6 +17,42 @@ import (
 	"github.com/boombuler/barcode"
 	"github.com/boombuler/barcode/qr"
 )
+
+func mergePng(path1 string, path2 string) {
+	image1, err := os.Open(path1)
+	if err != nil {
+		log.Fatalf("failed to open: %s", err)
+	}
+
+	first, err := png.Decode(image1)
+	if err != nil {
+		log.Fatalf("failed to decode: %s", err)
+	}
+	defer image1.Close()
+
+	image2, err := os.Open(path2)
+	if err != nil {
+		log.Fatalf("failed to open: %s", err)
+	}
+	second, err := png.Decode(image2)
+	if err != nil {
+		log.Fatalf("failed to decode: %s", err)
+	}
+	defer image2.Close()
+
+	offset := image.Pt(890, 350)
+	b := first.Bounds()
+	image3 := image.NewRGBA(b)
+	draw.Draw(image3, b, first, image.ZP, draw.Src)
+	draw.Draw(image3, second.Bounds().Add(offset), second, image.ZP, draw.Over)
+
+	third, err := os.Create(path2)
+	if err != nil {
+		log.Fatalf("failed to create: %s", err)
+	}
+	png.Encode(third, image3)
+	defer third.Close()
+}
 
 func wasmHandler(w http.ResponseWriter, r *http.Request) {
 
@@ -42,7 +80,7 @@ func wasmHandler(w http.ResponseWriter, r *http.Request) {
 		qrCode, _ := qr.Encode(content, qr.M, qr.Auto)
 
 		// Scale the barcode to 200x200 pixels
-		qrCode, _ = barcode.Scale(qrCode, 200, 200)
+		qrCode, _ = barcode.Scale(qrCode, 150, 150)
 
 		file, _ := os.Create(filename)
 		defer file.Close()
@@ -50,6 +88,12 @@ func wasmHandler(w http.ResponseWriter, r *http.Request) {
 		log.Printf("new code: " + filename + " id: " + x)
 
 		png.Encode(file, qrCode)
+
+		//rare := "rare.png"
+		//mergePng(rare, filename)
+
+		rarity := r.FormValue("rarity") + ".png"
+		mergePng(rarity, filename)
 
 	default:
 		fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
@@ -70,4 +114,5 @@ func main() {
 	mux.HandleFunc("/index.html", wasmHandler)
 	log.Printf("server started")
 	log.Fatal(http.ListenAndServe(":3000", mux))
+
 }
