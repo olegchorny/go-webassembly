@@ -8,6 +8,9 @@ WORKDIR /app
 RUN go get -u "github.com/boombuler/barcode"
 RUN go get -u "github.com/boombuler/barcode"
 RUN go get -u "github.com/dchest/uniuri"
+RUN go get -u "github.com/fogleman/gg"
+RUN go get -u "github.com/golang/freetype/truetype"
+RUN go get -u "golang.org/x/image/font/gofont/goregular"
 
 RUN CGO_ENABLED=1 GOOS=js GOARCH=wasm go get -u "github.com/dennwc/dom"
 RUN CGO_ENABLED=1 GOOS=js GOARCH=wasm go get -u "syscall/js" 

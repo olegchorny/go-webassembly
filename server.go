@@ -16,9 +16,13 @@ import (
 
 	"github.com/boombuler/barcode"
 	"github.com/boombuler/barcode/qr"
+
+	"github.com/fogleman/gg"
+	"github.com/golang/freetype/truetype"
+	"golang.org/x/image/font/gofont/goregular"
 )
 
-func mergePng(path1 string, path2 string) {
+func mergePng(path1 string, path2 string, path3 string, x int, y int) {
 	image1, err := os.Open(path1)
 	if err != nil {
 		log.Fatalf("failed to open: %s", err)
@@ -40,18 +44,37 @@ func mergePng(path1 string, path2 string) {
 	}
 	defer image2.Close()
 
-	offset := image.Pt(890, 350)
+	//offset := image.Pt(890, 350)
+	offset := image.Pt(x, y)
 	b := first.Bounds()
 	image3 := image.NewRGBA(b)
 	draw.Draw(image3, b, first, image.ZP, draw.Src)
 	draw.Draw(image3, second.Bounds().Add(offset), second, image.ZP, draw.Over)
 
-	third, err := os.Create(path2)
+	third, err := os.Create(path3)
 	if err != nil {
 		log.Fatalf("failed to create: %s", err)
 	}
 	png.Encode(third, image3)
 	defer third.Close()
+}
+
+func renderText(text string) {
+	font, err := truetype.Parse(goregular.TTF)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	face := truetype.NewFace(font, &truetype.Options{Size: 48})
+
+	dc := gg.NewContext(550, 100)
+	dc.SetFontFace(face)
+	dc.SetRGB(1, 1, 1)
+	dc.Clear()
+	dc.SetRGB(0, 0, 0)
+	dc.DrawStringAnchored(text, 275, 50, 0.5, 0.5)
+	dc.SavePNG("out.png")
+
 }
 
 func wasmHandler(w http.ResponseWriter, r *http.Request) {
@@ -74,13 +97,13 @@ func wasmHandler(w http.ResponseWriter, r *http.Request) {
 		//	x := xid.New()
 		x := uniuri.New()
 
-		content := f + " " + l + " " + x + " " + m + " " + p
+		content := f + " " + l + " " + " " + m + " " + p + x
 		filename := "./qr/" + f + ".png"
 
 		qrCode, _ := qr.Encode(content, qr.M, qr.Auto)
 
-		// Scale the barcode to 200x200 pixels
-		qrCode, _ = barcode.Scale(qrCode, 150, 150)
+		// Scale the barcode to 270x270 pixels
+		qrCode, _ = barcode.Scale(qrCode, 270, 270)
 
 		file, _ := os.Create(filename)
 		defer file.Close()
@@ -93,7 +116,10 @@ func wasmHandler(w http.ResponseWriter, r *http.Request) {
 		//mergePng(rare, filename)
 
 		rarity := r.FormValue("rarity") + ".png"
-		mergePng(rarity, filename)
+		mergePng(rarity, filename, filename, 650, 1250)
+
+		renderText(f)
+		mergePng(filename, "out.png", filename, 50, 1400)
 
 	default:
 		fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
